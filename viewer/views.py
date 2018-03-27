@@ -5,7 +5,8 @@ from .models import Entry
 
 def index(request):
     entries = Entry.objects.order_by('-date')
-    context = {'entries': entries}
+    num_entries = len(entries)
+    context = {'entries': entries, 'num_entries': num_entries}
     return render(request, 'diary/index.html', context)
 
 

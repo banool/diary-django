@@ -1,5 +1,7 @@
 from django.db import models
 
+# from datetime import datetime
+
 
 class Entry(models.Model):
     title = models.CharField(max_length=200, unique=True)
@@ -22,6 +24,9 @@ class Entry(models.Model):
 
     def fancy_text(self):
         return self.title
+
+    def date_text(self):
+        return self.date.strftime('%Y-%m-%d')
 
 
 class LifeEvent(models.Model):

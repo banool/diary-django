@@ -1,8 +1,27 @@
-<h1>Entries:</h1>
-<ul>
+<!DOCTYPE html>
+
+<b>Entries ({{ num_entries }})</b>
+</br>
+</br>
 {% for entry in entries %}
-<li>
-    <a href="{% url 'index' %}{{ entry.year }}/{{ entry.month }}/{{ entry.day }}">{{ entry.fancy_text }}</a>
-</li>
+<a href="{% url 'index' %}{{ entry.year }}/{{ entry.month }}/{{ entry.day }}">{{ entry.title }}</a>
+<br />
+<br />
 {% endfor %}
-</ul>
+
+<b>Entries ({{ num_others }})</b>
+</br>
+</br>
+{% for other in others %}
+<a href="{% url 'index' %}{{ other.year }}/{{ other.month }}/{{ other.day }}">{{ other.title }}</a>
+<br />
+<br />
+{% endfor %}
+
+<b>Historical entries ({{ num_historical }})</b>
+</br>
+</br>
+{% for historical in historical %}
+<a href="{% url 'index' %}{{ historical.year }}/{{ historical.month }}/{{ historical.day }}">{{ historical.title }}</a>
+<br />
+<br /> {% endfor %}
