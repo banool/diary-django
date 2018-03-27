@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<b>Entries ({{ num_entries }})</b>
+<b>Entries ({{ entries|length }})</b>
 </br>
 </br>
 {% for entry in entries %}
@@ -9,7 +9,7 @@
 <br />
 {% endfor %}
 
-<b>Entries ({{ num_others }})</b>
+<b>Others ({{ others|length }})</b>
 </br>
 </br>
 {% for other in others %}
@@ -18,9 +18,8 @@
 <br />
 {% endfor %}
 
-<b>Historical entries ({{ num_historical }})</b>
-</br>
-</br>
+<b>Historical entries ({{ historical|length }})</b>
+<p>These are old entries made to record big life events.</p>
 {% for historical in historical %}
 <a href="{% url 'index' %}{{ historical.year }}/{{ historical.month }}/{{ historical.day }}">{{ historical.title }}</a>
 <br />

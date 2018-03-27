@@ -1,6 +1,6 @@
 from django.db import models
 
-# from datetime import datetime
+START = "2017-05-11"
 
 
 class Entry(models.Model):
