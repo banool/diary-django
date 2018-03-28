@@ -53,10 +53,15 @@ def get_unix_time_from_text(body):
     return original_unix_time
 
 
+def get_title_of_entry_from_fname(fname):
+    title = os.path.basename(os.path.normpath(fname))
+    title = '.'.join(title.split('.')[:-1])
+    return title
+
+
 def get_entry_from_file(fname):
     with open(fname, 'r', encoding='utf-8') as f:
-        title = os.path.basename(os.path.normpath(fname))
-        title = '.'.join(title.split('.')[:-1])
+        title = get_title_of_entry_from_fname(fname)
         try:
             # All this date stuff is a bit messy.
             date = datetime.datetime.strptime(title, '%Y-%m-%d')
@@ -83,5 +88,24 @@ def load_all_markdown():
     for i in os.listdir(MARKDOWN_LOCATION):
         if os.path.splitext(i)[-1] != '.md':
             continue
+        e = get_entry_from_file(os.path.join(MARKDOWN_LOCATION, i))
+        e.save()
+
+
+def load_new_entries():
+    entries = []
+    for i in os.listdir(MARKDOWN_LOCATION):
+        if os.path.splitext(i)[-1] != '.md':
+            continue
+        title = get_title_of_entry_from_fname(i)
+        # This working properly is predicated on title being unique.
+        try:
+            Entry.objects.get(title=title)
+            # If this succeeds the Entry must already exist.
+            continue
+        except Entry.DoesNotExist:
+            pass
+        entries.append(i)
+    for i in entries:
         e = get_entry_from_file(os.path.join(MARKDOWN_LOCATION, i))
         e.save()
