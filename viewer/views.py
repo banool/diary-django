@@ -34,5 +34,5 @@ def entry(request, year, month, day):
     if len(entries) > 1:
         return HttpResponse('There is more than one entry???')
     entry = entries[0]
-    context = {'title': entry.title, 'body': entry.body}
+    context = {'body': entry.body}  # This includes the header.
     return render(request, 'diary/entry.html', context)

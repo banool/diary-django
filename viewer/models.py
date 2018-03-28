@@ -4,9 +4,17 @@ START = "2017-05-11"
 
 
 class Entry(models.Model):
+    # The original title from the file name.
     title = models.CharField(max_length=200, unique=True)
+    # For the file from which this Entry was created.
+    fname = models.CharField(max_length=200, unique=True, null=True)
+    # Datetime the Entry is meant to represent.
     date = models.DateTimeField()
+    # Datetime the Entry markdown was last modified.
+    modified = models.DateTimeField(null=True)
+    # Full HTML of the entry.
     body = models.TextField(blank=True)  # Unlimited length.
+    # The unix time written into the entry, just for fun.
     original_unix_time = models.IntegerField(default=0)
 
     def __str__(self):
@@ -28,6 +36,8 @@ class Entry(models.Model):
     def date_text(self):
         return self.date.strftime('%Y-%m-%d')
 
+
+# THESE AREN'T BEING USED FOR NOW.
 
 class LifeEvent(models.Model):
     body = models.TextField(blank=True)
