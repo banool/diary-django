@@ -1,6 +1,5 @@
 from django.urls import path
 
-# TODO Not necessary for production.
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -8,7 +7,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('<int:year>/<int:month>/<int:day>', views.entry),
+    path('<str:title>', views.entry),
 ]
 
 if settings.DEBUG:

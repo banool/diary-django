@@ -1,4 +1,3 @@
-from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from .models import Entry, START
 from .util import get_entry_from_file
@@ -15,7 +14,7 @@ DATE_RE = r'^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
 
 
 def index(request):
-    entries = Entry.objects.order_by('-date')
+    entries = Entry.objects.order_by('date')
     regular = [
         e for e in entries if re.match(DATE_RE, e.title)
     ]
@@ -32,16 +31,9 @@ def index(request):
     return render(request, 'diary/index.html', context)
 
 
-def entry(request, year, month, day):
-    # Get the right entry.
-    entries = Entry.objects.filter(
-        date__year=year, date__month=month, date__day=day,
-    )
-    if len(entries) == 0:
-        raise Http404('Diary entry does not exist :(')
-    if len(entries) > 1:
-        return HttpResponse('There is more than one entry???')
-    entry = entries[0]
+def entry(request, title):
+    # Get the entry. `title` is unique so this is works.
+    entry = Entry.objects.get(title=title)
     # Check that the entry hasn't been modified since it was last read in to
     # the database.
     curr_modified = time.mktime(entry.modified.timetuple())

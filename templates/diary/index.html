@@ -4,7 +4,7 @@
 </br>
 </br>
 {% for entry in entries %}
-<a href="{% url 'index' %}{{ entry.year }}/{{ entry.month }}/{{ entry.day }}">{{ entry.title }}</a>
+<a href="{% url 'index' %}{{ entry.title }}">{{ entry.title }}</a>
 <br />
 <br />
 {% endfor %}
@@ -13,7 +13,7 @@
 </br>
 </br>
 {% for other in others %}
-<a href="{% url 'index' %}{{ other.year }}/{{ other.month }}/{{ other.day }}">{{ other.title }}</a>
+<a href="{% url 'index' %}{{ other.title }}">{{ other.title }}</a>
 <br />
 <br />
 {% endfor %}
@@ -21,6 +21,6 @@
 <b>Historical entries ({{ historical|length }})</b>
 <p>These are old entries made to record big life events.</p>
 {% for historical in historical %}
-<a href="{% url 'index' %}{{ historical.year }}/{{ historical.month }}/{{ historical.day }}">{{ historical.title }}</a>
+<a href="{% url 'index' %}{{ historical.title }}">{{ historical.title }}</a>
 <br />
 <br /> {% endfor %}
