@@ -7,7 +7,6 @@ import logging
 import os
 import re
 import subprocess
-import tempfile
 import time
 
 logger = logging.getLogger(__name__)
@@ -34,6 +33,7 @@ def index(request):
 
 
 def entry(request, year, month, day):
+    # Get the right entry.
     entries = Entry.objects.filter(
         date__year=year, date__month=month, date__day=day,
     )
@@ -52,19 +52,18 @@ def entry(request, year, month, day):
         new_entry.save()
         entry = new_entry
         # TODO get this logger working.
-        logger.info(f'Pulled modified entry ({entry.title}) from disk into database.')
-        print(f'INFO: Pulled modified entry ({entry.title}) from disk into database.')
+        logger.info(f'Pulled modified entry ({entry.title}) from disk into db.')
+        print(f'INFO: Pulled modified entry ({entry.title}) from disk into db.')
     # Generate the HTML for this entry from the markdown (body).
     # TODO Consider caching. Probably misallocated effort.
     p = subprocess.Popen(
-        'python prefilter.py --stdin | python filter.py | python -m markdown \
-        -x markdown.extensions.nl2br -x markdown.extensions.fenced_code',
+        'python prefilter.py --stdin | python filter.py | python -m markdown '
+        '-x markdown.extensions.nl2br -x markdown.extensions.fenced_code',
         stdout=subprocess.PIPE,
         stdin=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         shell=True,
     )
-    # TODO There is some odd newline thing happening here.
     out, _ = p.communicate(entry.body.encode('utf-8'))
-    context = {'body': out.decode('utf-8')}  # This includes the header.
+    context = {'body': out.decode('utf-8')}  # This includes the h1 header.
     return render(request, 'diary/entry.html', context)
