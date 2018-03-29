@@ -1,6 +1,7 @@
 # My stuff
 .DS_Store
 diary/secret_key.py
+db.sqlite3
 
 # Django stuff
 *.egg-info
