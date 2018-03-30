@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
 from .models import Entry, START
 from .util import get_entry_from_file
 
@@ -31,6 +33,7 @@ def index(request):
     return render(request, 'diary/index.html', context)
 
 
+@login_required
 def entry(request, title):
     # Get the entry. `title` is unique so this is works.
     entry = Entry.objects.get(title=title)
