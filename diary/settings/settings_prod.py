@@ -30,7 +30,7 @@ DATABASES = {
     }
 }
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_collection_point/')  # noqa
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')  # noqa
 
 LOGGING = {
     'version': 1,
