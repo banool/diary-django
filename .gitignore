@@ -5,6 +5,7 @@ db.sqlite3
 myvenv
 prefilter.py
 filter.py
+static_collection_point/
 
 # Django stuff
 *.egg-info
