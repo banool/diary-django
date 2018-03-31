@@ -5,9 +5,13 @@ import pytz
 import re
 import time
 
+from contextlib import suppress
 from django.conf import settings
 from .models import Entry
 
+
+DATE_RE = r'^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
+DATE_RE_NO_ANCHORS = r'[0-9]{4}-[0-9]{2}-[0-9]{2}'
 
 MARKDOWN_LOCATION = '/Users/daniel/diary/entries'
 
@@ -64,7 +68,10 @@ def get_entry_from_file(fname):
         title = get_title_of_entry_from_fname(fname)
         try:
             # All this date stuff is a bit messy.
-            date = datetime.datetime.strptime(title, '%Y-%m-%d')
+            date_part = title
+            with suppress(TypeError):
+                date_part = re.match(DATE_RE_NO_ANCHORS, title)[0]
+            date = datetime.datetime.strptime(date_part, '%Y-%m-%d')
             ut = time.mktime(date.timetuple())
             date = unix_time_to_local_datetime(ut)
         except ValueError:
@@ -84,7 +91,7 @@ def get_entry_from_file(fname):
         return e
 
 
-def load_all_markdown():
+def load_all_entries():
     for i in os.listdir(MARKDOWN_LOCATION):
         if os.path.splitext(i)[-1] != '.md':
             continue

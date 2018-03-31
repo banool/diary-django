@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 from .models import Entry, START
-from .util import get_entry_from_file
+from .util import get_entry_from_file, DATE_RE
 
 import logging
 import os
@@ -11,8 +11,6 @@ import subprocess
 import time
 
 logger = logging.getLogger(__name__)
-
-DATE_RE = r'^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
 
 
 def index(request):
