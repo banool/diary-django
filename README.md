@@ -1,6 +1,8 @@
 # Django Diary
 This is an exact replica of the diary from my ftp webspace using Django. The link format is the same, the markdown is rendered into HTML in the exact same way, and the index looks exactly the same.
 
+I don't intend for anyone else to use this, it's got too many weird little details specific to my set up.
+
 ## How to setup
 1. Clone this repo and the [original diary](https://github.com/banool/diary).
 2. `cd` into the directory for this repo and run `ln -s ~/diary/scripts/prefilter.py && ln -s ~/diary/scripts/filter.py`.
@@ -8,6 +10,18 @@ This is an exact replica of the diary from my ftp webspace using Django. The lin
 
 This will work fine in dev, but in prod you're going to struggle. Luckily I've figured it all out more or less, check `diary.sh` in `https://github.com/banool/server-setup` for how to set it all up properly in production.
 
+In the original diary (probably `~/diary`) make a file called `.git/hooks/post-merge`:
+
+```
+#!/bin/bash
+
+cd /var/www/diary-django
+source myvenv/bin/activate
+python manage.py shell -c "from viewer import util; util.load_new_entries()"
+deactivate
+```
+
+This will get the Django diary to pull new entries in following a `git pull` in the original diary that changes something. So make sure to also put `cd ~/diary && git pull` in the crontab. This of course means that you need to push entries to the original diary repo for it to be updated on to the website.
 
 ## To do
 - Tests, my previous diary was sorely lacking this.
