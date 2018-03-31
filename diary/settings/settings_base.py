@@ -21,14 +21,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 try:
-    from .secret_key import SECRET_KEY
+    from .secrets import SECRET_KEY
 except ImportError:
-    raise RuntimeError('You must provide the secret key!')
+    raise RuntimeError('You must provide a secret key file!')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
