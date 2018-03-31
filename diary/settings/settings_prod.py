@@ -2,6 +2,8 @@ from .settings_base import *  # noqa
 
 import os
 
+MARKDOWN_LOCATION = os.path.join(os.path.expanduser('~'), 'diary', 'entries')
+
 DEBUG = False
 
 SECURE_CONTENT_TYPE_NOSNIFF = True

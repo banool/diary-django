@@ -50,7 +50,8 @@ def entry(request, title):
     # Generate the HTML for this entry from the markdown (body).
     # TODO Consider caching. Probably misallocated effort.
     p = subprocess.Popen(
-        'python prefilter.py --stdin | python filter.py | python -m markdown '
+        'python prefilter.py --stdin | python filter.py | '
+        'python3.6 -m markdown '
         '-x markdown.extensions.nl2br -x markdown.extensions.fenced_code',
         stdout=subprocess.PIPE,
         stdin=subprocess.PIPE,
