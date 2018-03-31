@@ -10,9 +10,9 @@ SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 X_FRAME_OPTIONS = 'DENY'
-# SECURE_HSTS_SECONDS = 
+# SECURE_HSTS_SECONDS =
 
-ALLOWED_HOSTS = ['diary.dport.me', '10.1.1.248']
+ALLOWED_HOSTS = ['diary.dport.me', '10.1.1.248', '127.0.0.1']
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
@@ -29,3 +29,32 @@ DATABASES = {
 }
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_collection_point/')  # noqa
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/var/log/diary-django/log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'diary': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'viewer': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
