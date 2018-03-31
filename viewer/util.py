@@ -1,4 +1,5 @@
 import datetime
+import logging
 import os
 import platform
 import pytz
@@ -9,6 +10,7 @@ from contextlib import suppress
 from django.conf import settings
 from .models import Entry
 
+logger = logging.getLogger(__name__)
 
 DATE_RE = r'^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
 DATE_RE_NO_ANCHORS = r'[0-9]{4}-[0-9]{2}-[0-9]{2}'
@@ -115,3 +117,4 @@ def load_new_entries():
     for i in entries:
         e = get_entry_from_file(os.path.join(MARKDOWN_LOCATION, i))
         e.save()
+        logging.info('Loaded entry ' + str(i))
