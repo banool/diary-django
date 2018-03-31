@@ -28,4 +28,4 @@ DATABASES = {
     }
 }
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_collection_point/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_collection_point/')  # noqa
