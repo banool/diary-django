@@ -59,5 +59,6 @@ def entry(request, title):
         shell=True,
     )
     out, _ = p.communicate(entry.body.encode('utf-8'))
-    context = {'body': out.decode('utf-8')}  # This includes the h1 header.
+    # This includes the h1 header.
+    context = {'body': out.decode('utf-8'), 'title': title}
     return render(request, 'diary/entry.html', context)
