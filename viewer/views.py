@@ -1,13 +1,19 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from .models import Entry, START
-from .util import get_entry_from_file, DATE_RE
+from .models import (
+    Entry,
+    START,
+)
+from .util import (
+    get_entry_from_file, 
+    render_markdown,
+    DATE_RE,
+)
 
 import logging
 import os
 import re
-import subprocess
 import time
 
 logger = logging.getLogger(__name__)
@@ -33,7 +39,6 @@ def index(request):
 
 @login_required
 def entry(request, title):
-    print(request.user)
     # Get the entry. `title` is unique so this is works.
     entry = Entry.objects.get(title=title)
     # Check that the entry hasn't been modified since it was last read in to
@@ -50,23 +55,7 @@ def entry(request, title):
         print(f'INFO: Pulled modified entry ({entry.title}) from disk into db.')
     # Generate the HTML for this entry from the markdown (body).
     # TODO Consider caching. Probably misallocated effort.
-    filter = 'python filter.py | '
-    print(request.user)
-    print(dir(request.user))
-    if request.user.username == 'daniel':
-        filter = ''
-    # TODO Authenticate properly with permissions and all.
-    p = subprocess.Popen(
-        'python prefilter.py --stdin | {}'
-        'python3.6 -m markdown '
-        '-x markdown.extensions.nl2br '
-        '-x markdown.extensions.fenced_code'.format(filter),
-        stdout=subprocess.PIPE,
-        stdin=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        shell=True,
-    )
-    out, _ = p.communicate(entry.body.encode('utf-8'))
+    out = render_markdown(entry.body, username=request.user.username)
     # This includes the h1 header.
-    context = {'body': out.decode('utf-8'), 'title': title}
+    context = {'body': out, 'title': title}
     return render(request, 'diary/entry.html', context)
