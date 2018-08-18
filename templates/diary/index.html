@@ -1,15 +1,53 @@
 {% include '../base.html' %}
 
+<head>
 <title>my diary</title>
+<style>
+ /* Style the button that is used to open and close the collapsible content */
+.collapsible {
+    background-color: #eee;
+    color: #444;
+    padding: 8px;
+    cursor: pointer;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .collapsible:hover {
+    background-color: #ccc;
+}
+
+/* Style the collapsible content. Note: hidden by default */
+.content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    background-color: #f1f1f1;
+} 
+</style>
+</head>
 
 <b>Entries ({{ entries|length }})</b>
 </br>
 </br>
 {% for entry in entries %}
+    {% ifchanged entry.month %}
+    {% if not forloop.first %}
+        </div>
+    {% endif %}
+    {% if not forloop.last %}
+        <button class="collapsible">{{ entry.year }}-{{ entry.month }}</button> 
+        <div class="content">
+    {% endif %}
+    {% endifchanged %}
 <a href="{% url 'index' %}{{ entry.title }}">{{ entry.title }}</a>
 <br />
 <br />
 {% endfor %}
+</div>
 
 <b>Others ({{ others|length }})</b>
 </br>
@@ -26,3 +64,38 @@
 <a href="{% url 'index' %}{{ historical.title }}">{{ historical.title }}</a>
 <br />
 <br /> {% endfor %}
+
+
+<script>
+
+function getCount(parent, getChildrensChildren){
+    var relevantChildren = 0;
+    var children = parent.childNodes.length;
+    for(var i=0; i < children; i++){
+        if(parent.childNodes[i].tagName != "A") {
+            continue;
+        }
+	if(getChildrensChildren)
+	    relevantChildren += getCount(parent.childNodes[i],true);
+	relevantChildren++;
+    }
+    return relevantChildren;
+}
+
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+            content.style.display = "none";
+        } else {
+            content.style.display = "block";
+        }
+    });
+    coll[i].textContent += " (" + getCount(coll[i].nextElementSibling, false) + ")";
+}
+
+</script>
