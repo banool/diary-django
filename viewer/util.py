@@ -4,6 +4,7 @@ import os
 import platform
 import pytz
 import re
+import subprocess
 import time
 
 from contextlib import suppress
@@ -118,3 +119,25 @@ def load_new_entries():
         e = get_entry_from_file(os.path.join(MARKDOWN_LOCATION, i))
         e.save()
         logging.info('Loaded entry ' + str(i))
+
+
+def render_markdown(markdown, username=None):
+    ''' Takes markdown and renders it into HTML. Based on the user,
+    secret sections may or may not be included in the final rendered HTML.
+    '''
+    filter = 'python filter.py | '
+    if username == 'daniel':
+        filter = ''
+    # TODO Authenticate properly with permissions and all.
+    p = subprocess.Popen(
+        'python prefilter.py --stdin | {}'
+        'python3.6 -m markdown '
+        '-x markdown.extensions.nl2br '
+        '-x markdown.extensions.fenced_code'.format(filter),
+        stdout=subprocess.PIPE,
+        stdin=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        shell=True,
+    )
+    out, _ = p.communicate(markdown.encode('utf-8'))
+    return out.decode('utf-8')

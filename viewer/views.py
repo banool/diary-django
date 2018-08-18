@@ -1,13 +1,19 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from .models import Entry, START
-from .util import get_entry_from_file, DATE_RE
+from .models import (
+    Entry,
+    START,
+)
+from .util import (
+    get_entry_from_file, 
+    render_markdown,
+    DATE_RE,
+)
 
 import logging
 import os
 import re
-import subprocess
 import time
 
 logger = logging.getLogger(__name__)
@@ -49,16 +55,7 @@ def entry(request, title):
         print(f'INFO: Pulled modified entry ({entry.title}) from disk into db.')
     # Generate the HTML for this entry from the markdown (body).
     # TODO Consider caching. Probably misallocated effort.
-    p = subprocess.Popen(
-        'python prefilter.py --stdin | python filter.py | '
-        'python3.6 -m markdown '
-        '-x markdown.extensions.nl2br -x markdown.extensions.fenced_code',
-        stdout=subprocess.PIPE,
-        stdin=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        shell=True,
-    )
-    out, _ = p.communicate(entry.body.encode('utf-8'))
+    out = render_markdown(entry.body, username=request.user.username)
     # This includes the h1 header.
-    context = {'body': out.decode('utf-8'), 'title': title}
+    context = {'body': out, 'title': title}
     return render(request, 'diary/entry.html', context)
