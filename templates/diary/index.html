@@ -51,6 +51,20 @@
 {% endfor %}
 </div>
 
+
+</br>
+<b>Important entries</b>
+</br>
+</br>
+{% for entry in entries %}
+    {% if "important" in entry.tags|lower or "recap" in entry.tags|lower %}
+<a href="{% url 'index' %}{{ entry.title }}">{{ entry.title }}</a>
+<br />
+<br />
+    {% endif %}
+{% endfor %}
+
+
 <b>Others ({{ others|length }})</b>
 </br>
 </br>
