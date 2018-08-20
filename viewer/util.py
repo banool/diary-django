@@ -9,6 +9,7 @@ import time
 
 from contextlib import suppress
 from django.conf import settings
+from django.db.utils import IntegrityError
 from .models import Entry
 
 logger = logging.getLogger(__name__)
@@ -81,6 +82,13 @@ def get_entry_from_file(fname):
             print('WARNING: Couldn\'t get date from the file name: ' + fname)
         modified = unix_time_to_local_datetime(os.path.getmtime(fname))
         body = f.read()
+        try:
+            # print(body.splitlines())
+            tags_line = [i for i in body.splitlines() if i.startswith("Tags:")][-1]
+            tags = tags_line.replace("Tags:", "").lstrip()
+        except Exception as exc:
+            print("Couldn't get tags from {}: {}".format(title, exc))
+            tags = "" 
         original_unix_time = get_unix_time_from_text(body)
         e = Entry(
             title=title,
@@ -89,16 +97,24 @@ def get_entry_from_file(fname):
             modified=modified,
             body=body,
             original_unix_time=original_unix_time,
+            tags=tags,
         )
         return e
 
 
-def load_all_entries():
+def load_all_entries(force=False):
     for i in os.listdir(MARKDOWN_LOCATION):
         if os.path.splitext(i)[-1] != '.md':
             continue
         e = get_entry_from_file(os.path.join(MARKDOWN_LOCATION, i))
-        e.save()
+        try:
+            e.save()
+        except IntegrityError:
+            if not force:
+                print("Error. Try using force=True")
+                raise
+            old = Entry.objects.get(title=e.title).delete()
+            e.save() 
 
 
 def load_new_entries():

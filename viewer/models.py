@@ -16,6 +16,8 @@ class Entry(models.Model):
     body = models.TextField(blank=True)  # Unlimited length.
     # The unix time written into the entry, just for fun.
     original_unix_time = models.IntegerField(default=0)
+    # A comma-separated list of tags.
+    tags = models.CharField(max_length=200, default="")
 
     def __str__(self):
         return self.title
