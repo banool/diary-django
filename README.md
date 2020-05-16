@@ -16,6 +16,8 @@ You need a `.env` file that contains the following keys:
 - DB_NAME
 - DB_USER
 - DB_PASS
+- DB_HOST
+- DB_PORT
 - SECRET_KEY
 - UI_EMAIL
 - UI_USERNAME
