@@ -34,6 +34,15 @@ RUN apk add mariadb-connector-c-dev
 ENV DJANGO_SETTINGS_MODULE diary.settings.settings_prod
 RUN apk add git openssh
 
+# Serve static content
+USER root
+EXPOSE 11112
+RUN apk add nginx openrc
+RUN sed -i 's@return 404\;@@' /etc/nginx/conf.d/default.conf
+RUN sed -i 's@# Everything.*@root /container/static;@' /etc/nginx/conf.d/default.conf
+RUN sed -i 's@80@11112@g' /etc/nginx/conf.d/default.conf
+RUN rc-update add nginx default
+
 # Run server
 ENV INTERNAL_PORT 11111
 
