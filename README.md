@@ -3,7 +3,34 @@ This is an exact replica of the diary from my ftp webspace using Django. The lin
 
 I don't intend for anyone else to use this, it's got too many weird little details specific to my set up.
 
-## How to setup
+## Development
+```
+pipenv --python 3.7
+pipenv install
+pipenv run ./run.sh 6000
+```
+
+## Production
+You need a `.env` file that contains the following keys:
+
+- DB_NAME
+- DB_USER
+- DB_PASS
+- SECRET_KEY
+- UI_EMAIL
+- UI_USERNAME
+- UI_PASSWORD
+
+```
+docker build . -t diary
+docker run -p 6000:6000 --env-file .env -it diary --name diary
+```
+
+## Real production
+Go use the ansible setup in [server-setup](https://github.com/banool/server-setup).
+
+
+## How to setup (old)
 1. Clone this repo and the [original diary](https://github.com/banool/diary).
 2. `cd` into the directory for this repo and run `ln -s ~/diary/scripts/prefilter.py && ln -s ~/diary/scripts/filter.py`.
 3. Make a virtualenv from the requirements file. In `bin/activate`, add a line like `export DJANGO_SETTINGS_MODULE="diary.settings.settings_prod"` to tell Django which settings file to use.

@@ -1,0 +1,3 @@
+[submodule "diary-old"]
+	path = diary-old
+	url = git@github.com:banool/diary.git

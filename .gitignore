@@ -5,6 +5,7 @@ myvenv
 prefilter.py
 filter.py
 static/
+.env
 
 # Django stuff
 *.egg-info
