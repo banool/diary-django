@@ -3,6 +3,11 @@ This is an exact replica of the diary from my ftp webspace using Django. The lin
 
 I don't intend for anyone else to use this, it's got too many weird little details specific to my set up.
 
+## How does this work?
+This repo is a secretless django server that exists to serve the diary. It does not contain any diary data. The backing store for the data is the [original diary](https://github.com/banool/diary). In the original repo, I would run a script that converted the markdown into HTML and then copy it across to an FTP server.
+
+This repo contains the old repo as a submodule. Instead of converting the markdown to HTML in advance, we load the markdown into a DB and then serve it up as HTML on demand. So in this version, the true backing store for each entry is still those markdown files. This means the DB is also sort of stateless, since the data can always be loaded back up from the original diary's repo.
+
 ## Development
 ```
 pipenv --python 3.7
@@ -15,7 +20,7 @@ You need a `.env` file that contains the following keys:
 
 - DB_NAME
 - DB_USER
-- DB_PASS
+- DB_PASSWORD
 - DB_HOST
 - DB_PORT
 - SECRET_KEY
