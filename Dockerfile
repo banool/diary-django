@@ -16,6 +16,8 @@ RUN pip install --install-option="--prefix=/install" -r requirements.txt
 # Real image
 FROM base
 
+WORKDIR /container
+
 # Copy in build from previous stage
 COPY --from=builder /install /usr/local
 COPY . .
@@ -36,4 +38,4 @@ RUN apk add git openssh
 ENV INTERNAL_PORT 11111
 
 EXPOSE $INTERNAL_PORT
-ENTRYPOINT ./run.sh $INTERNAL_PORT
+ENTRYPOINT /container/run.sh $INTERNAL_PORT

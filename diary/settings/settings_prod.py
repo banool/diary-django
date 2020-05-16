@@ -17,7 +17,7 @@ SECURE_HSTS_SECONDS = 3600
 SECURE_HSTS_PRELOAD = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
-ALLOWED_HOSTS = ['diary.dport.me', '127.0.0.1', '0.0.0.0', 'localhost']
+ALLOWED_HOSTS = os.environ["ALLOWED_HOSTS"].split(",")
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
