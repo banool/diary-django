@@ -10,6 +10,8 @@ fi
 PORT=$1
 
 # Update submodule (old diary)
+# You need SSH keys for this
+git submodule add --name diary-old git@github.com:banool/diary.git diary-old/
 git submodule init
 git submodule update
 cd diary-old

@@ -6,6 +6,7 @@ prefilter.py
 filter.py
 static/
 .env
+*.swp
 
 # Django stuff
 *.egg-info
