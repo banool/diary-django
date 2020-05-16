@@ -147,7 +147,7 @@ def render_markdown(markdown, username=None):
     # TODO Authenticate properly with permissions and all.
     p = subprocess.Popen(
         'python prefilter.py --stdin | {}'
-        'python3.6 -m markdown '
+        'python -m markdown '
         '-x markdown.extensions.nl2br '
         '-x markdown.extensions.fenced_code'.format(filter),
         stdout=subprocess.PIPE,
