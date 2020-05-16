@@ -1,6 +1,5 @@
 import os
 
-from core.secrets import secrets
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 
