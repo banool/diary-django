@@ -11,15 +11,17 @@ COPY requirements.txt /install
 RUN apk update
 RUN apk add gcc python3-dev musl-dev mariadb-connector-c-dev mysql-client
 
-RUN pip install --install-option="--prefix=/install" -r requirements.txt
+RUN pip install --install-option="--prefix=/release" -r requirements.txt
 
 # Real image
 FROM base
 
+USER root
+
 WORKDIR /container
 
 # Copy in build from previous stage
-COPY --from=builder /install /usr/local
+COPY --from=builder /release /usr/local
 COPY . .
 
 # Docker specific environment vars
@@ -35,13 +37,7 @@ ENV DJANGO_SETTINGS_MODULE diary.settings.settings_prod
 RUN apk add git openssh
 
 # Serve static content
-USER root
 EXPOSE 11112
-RUN apk add nginx openrc
-RUN sed -i 's@return 404\;@@' /etc/nginx/conf.d/default.conf
-RUN sed -i 's@# Everything.*@root /container/static;@' /etc/nginx/conf.d/default.conf
-RUN sed -i 's@80@11112@g' /etc/nginx/conf.d/default.conf
-RUN rc-update add nginx default
 
 # Run server
 ENV INTERNAL_PORT 11111

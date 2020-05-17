@@ -18,6 +18,7 @@ pipenv run ./run.sh 6000
 ## Production
 You need a `.env` file that contains the following keys:
 
+- ALLOWED_HOSTS
 - DB_NAME
 - DB_USER
 - DB_PASSWORD
