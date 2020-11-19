@@ -37,10 +37,13 @@ def index(request):
     return render(request, 'diary/index.html', context)
 
 
-@login_required
 def entry(request, title):
-    # Get the entry. `title` is unique so this is works.
     entry = Entry.objects.get(title=title)
+    if "no_auth_required" in entry.tags:
+        pass
+    elif not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    # Get the entry. `title` is unique so this is works.
     # Check that the entry hasn't been modified since it was last read in to
     # the database.
     curr_modified = time.mktime(entry.modified.timetuple())
