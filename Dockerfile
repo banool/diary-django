@@ -1,5 +1,5 @@
 # Build everything in the first stage
-FROM python:3.8-alpine as base
+FROM python:3.9-alpine as base
 
 FROM base as builder
 
@@ -11,7 +11,9 @@ COPY requirements.txt /install
 RUN apk update
 RUN apk add gcc python3-dev musl-dev mariadb-connector-c-dev mysql-client
 
-RUN pip install --install-option="--prefix=/release" -r requirements.txt
+ENV PATH="/release/bin:${PATH}"
+
+RUN pip install --prefix=/release -r requirements.txt
 
 # Real image
 FROM base
