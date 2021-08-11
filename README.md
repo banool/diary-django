@@ -30,8 +30,8 @@ You need a `.env` file that contains the following keys:
 - UI_PASSWORD
 
 ```
-docker build . -t diary
-docker run -p 6000:6000 --env-file .env -it diary --name diary
+docker build . -t diary-django
+docker run -p 6000:6000 --env-file .env -v /Users/dport/.ssh:/root/.ssh -it diary-django --name diary-django
 ```
 
 ## Real production
