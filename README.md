@@ -30,6 +30,8 @@ You need a `.env` file that contains the following keys:
 - UI_USERNAME
 - UI_PASSWORD
 
+Remember when you're running this on Mac, you have to use `host.docker.internal` to refer to the host machine.
+
 ```
 docker build . -t diary-django
 docker run -p 11112:11112 -p 11111:11111 --env-file .env -v /Users/dport/.ssh:/root/.ssh -it diary-django
