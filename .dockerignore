@@ -1,5 +1,10 @@
 Dockerfile
 __pycache__
 notebook_doodles
-.env
+*.env
 myvenv
+.venv
+README.md
+.dockerignore
+.gitignore
+.git

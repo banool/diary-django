@@ -9,10 +9,11 @@ This repo is a secretless django server that exists to serve the diary. It does 
 This repo contains the old repo as a submodule. Instead of converting the markdown to HTML in advance, we load the markdown into a DB and then serve it up as HTML on demand. So in this version, the true backing store for each entry is still those markdown files. This means the DB is also sort of stateless, since the data can always be loaded back up from the original diary's repo.
 
 ## Development
+Using Poetry 1.7.1.
+
 ```
-pipenv --python 3.7
-pipenv install
-pipenv run ./run.sh 6000
+poetry install
+poetry run ./run.sh 6000
 ```
 
 ## Production
@@ -31,12 +32,11 @@ You need a `.env` file that contains the following keys:
 
 ```
 docker build . -t diary-django
-docker run -p 6000:6000 --env-file .env -v /Users/dport/.ssh:/root/.ssh -it diary-django --name diary-django
+docker run -p 11112:11112 -p 11111:11111 --env-file .env -v /Users/dport/.ssh:/root/.ssh -it diary-django
 ```
 
 ## Real production
 Go use the ansible setup in [server-setup](https://github.com/banool/server-setup).
-
 
 ## How to setup (old)
 1. Clone this repo and the [original diary](https://github.com/banool/diary).

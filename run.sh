@@ -12,15 +12,8 @@ PORT=$1
 # Jankily serve static content
 python -m http.server 11112 --directory diary &
 
-# Update submodule (old diary)
-# You need SSH keys for this
-git submodule add --name diary-old git@github.com:banool/diary.git diary-old/
-git submodule init
-git submodule update
-cd diary-old
-git checkout master
-git pull
-cd ..
+# Clone the diary content itself.
+git clone git@github.com:banool/diary.git diary-old/
 
 # Make necessary symlinks
 ln -s diary-old/scripts/prefilter.py

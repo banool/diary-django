@@ -1,48 +1,52 @@
-# Build everything in the first stage
-FROM python:3.9-alpine as base
+# Build everything in first stage
+FROM python:3.11-buster as builder
 
-FROM base as builder
+RUN pip install poetry==1.7.1
 
-WORKDIR /install
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    POETRY_VIRTUALENVS_CREATE=1 \
+    POETRY_CACHE_DIR=/tmp/poetry_cache
 
-COPY requirements.txt /install
+WORKDIR /app
+
+COPY pyproject.toml poetry.lock ./
 
 # Build MySQL library
-RUN apk update
-RUN apk add gcc python3-dev musl-dev mariadb-connector-c-dev mysql-client
+RUN apt-get update
+RUN apt-get install -y python3-dev mariadb-client
 
-ENV PATH="/release/bin:${PATH}"
+# Requirements
+RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR
 
-RUN pip install --prefix=/release -r requirements.txt
+# The runtime image, used to just run the code provided its virtual environment
+FROM python:3.11-slim-buster as runtime
 
-# Real image
-FROM base
+ENV VIRTUAL_ENV=/app/.venv PATH="/app/.venv/bin:$PATH"
 
-USER root
+COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
-WORKDIR /container
-
-# Copy in build from previous stage
-COPY --from=builder /release /usr/local
-COPY . .
+COPY . /app
 
 # Docker specific environment vars
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
 # Install only the MySQL stuff we need
-RUN apk update
-RUN apk add mariadb-connector-c-dev
+RUN apt update
+RUN apt install -y mariadb-client
 
 # Other stuff
 ENV DJANGO_SETTINGS_MODULE diary.settings.settings_prod
-RUN apk add git openssh
+RUN apt install -y git
 
 # Serve static content
 EXPOSE 11112
 
 # Run server
+USER root
 ENV INTERNAL_PORT 11111
-
 EXPOSE $INTERNAL_PORT
-ENTRYPOINT /container/run.sh $INTERNAL_PORT
+EXPOSE $INTERNAL_PORT
+WORKDIR /app
+ENTRYPOINT ./run.sh $INTERNAL_PORT

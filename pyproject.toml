@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "diary-django"
+version = "0.1.0"
+description = ""
+authors = ["Daniel Porteous <daniel@dport.me>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.2.7"
+django-extensions = "^3.2.3"
+gunicorn = "^21.2.0"
+markdown = "^3.5.1"
+mysqlclient = "^2.2.0"
+pytz = "^2023.3.post1"
+six = "^1.16.0"
+
+[tool.poetry.group.dev.dependencies]
+autopep8 = "^2.0.4"
+flake8 = "^6.1.0"
+pycodestyle = "^2.11.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
